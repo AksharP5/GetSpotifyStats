@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+{% block title %}
+Recommended Songs
+{% endblock %}
+
+{% block nav %}
+<li><a href="/home">Home</a></li>
+<li><a href="/recent_limit">Recent Songs</a></li>
+<li><a href="/before_top_songs">Top Songs</a></li>
+<li><a href="/before_top_artists">Top Artists</a></li>
+<li><a class="active" href="/before_recommended">Recommended Songs</a></li>
+<li><a href="/about">About</a></li>
+{% endblock %}
+
+{% block body %}
+<main>
+<form action="/recommended" class="recommended" method="POST">
+    <div class="card-container">
+        {% for track in rec['tracks'] %}
+        <div class="card">
+            <div class="track">
+                <img src="{{ track['album']['images'][0]['url'] }}" alt="Image of {{ track['name'] }}" class="pic">
+                <p>Artist: {{ track['artists'][0]['name'] }}</p>
+                <p>Track: {{ track['name'] }}</p>
+                <p>Popularity: {{ track["popularity"] }}</p>
+                <p>Duration: {{ track["duration_ms"]|format_duration }}</p>
+                <p><a href="{{ track['external_urls']['spotify'] }}" target="_blank">Listen On Spotify</a></p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+</form>
+</main> 
+{% endblock %}

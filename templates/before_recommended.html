@@ -1,0 +1,68 @@
+{% extends "layout.html" %}
+{% block title %}
+Select Recommended Attributes
+{% endblock %}
+
+{% block nav %}
+<li><a href="/home">Home</a></li>
+<li><a href="/recent_limit">Recent Songs</a></li>
+<li><a href="/before_top_songs">Top Songs</a></li>
+<li><a href="/before_top_artists">Top Artists</a></li>
+<li><a class="active" href="/before_recommended">Recommended Songs</a></li>
+<li><a href="/about">About</a></li>
+{% endblock %}
+
+{% block body %}
+<div class="user-input">
+  <form action="/recommended" class="before_recommended" method="POST">
+    <center>
+      <label for="before_recommended_limit">How Many Recommended Songs Would You Like To Display? (Min: 1 , Max:
+        100):</label>
+      <br>
+      <input type="number" name="before_recommended_limit" id="before_recommended_limit" min="1" max="100" placeholder="1" required>
+
+      <h6><label for="selected_artists[]">Select Which Songs To Generate Recommended Songs Based Off (Please Ensure The
+        Total
+        Between The Selected Artists, Songs, and Genres Is Limited to 5, But One Of Them Must Be Something Other Than None)</label></h6>
+      <select name="selected_artists[]" id="selected_artists" multiple required>
+        <option value="None">None</option>
+        {% for key,value in seed_artists.items() %}
+        <img src="{{ value[2] }}" alt="Image of {{ key }}">
+        <option value="{{ value[1] }}"> {{ value[0] }}. {{ key }}</option>
+        {% endfor %}
+      </select>
+
+      <h6><label for="selected_genres">Select Which Songs To Generate Recommended Songs Based Off (Please Ensure The
+        Total
+        Between The Selected Artists, Songs, and Genres Is Limited to 5, But One Of Them Must Be Something Other Than None)</label></h6>
+      <select name="selected_genres[]" id="selected_genres" multiple required>
+        <option value="None">None</option>
+        {% for key,value in seed_genres.items() %}
+        <option value="{{ value }}">{{ key }}. {{ value }}</option>
+        {% endfor %}
+      </select>
+
+      <h6><label for="selected_songs">Select Which Songs To Generate Recommended Songs Based Off (Please Ensure The
+          Total
+          Between The Selected Artists, Songs, and Genres Is Limited to 5, But One Of Them Must Be Something Other Than None)</label></h6>
+      <select name="selected_songs[]" id="selected_songs" multiple required>
+        <option value="None">None</option>
+        {% for key,value in seed_songs.items() %}
+        <img src="{{ value[2] }}" alt="Image of {{ key }}">
+        <option value="{{ value[1] }}">{{ value[0] }}. {{ key }}</option>
+        {% endfor %}
+      </select>
+
+      <h6><label for="selected_country">Select Which Country The Recommended Songs Will Be Playable In</label></h6>
+      <select name="selected_country" id="selected_country" required>
+        {% for key,value in seed_countries.items() %}
+        <option value="{{ value }}">{{ value }}</option>
+        {% endfor %}
+      </select>
+    </center>
+    <center>
+      <input type="submit" value="Generate Recommendations">
+    </center>
+  </form>
+</div>
+{% endblock %}

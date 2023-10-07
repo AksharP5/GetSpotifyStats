@@ -1,0 +1,65 @@
+{% extends "layout.html" %}
+{% block title %}
+Provide Top Songs Input
+{% endblock %}
+
+{% block nav %}
+<li><a href="/home">Home</a></li>
+<li><a href="/recent_limit">Recent Songs</a></li>
+<li><a class="active" href="/before_top_songs">Top Songs</a></li>
+<li><a href="/before_top_artists">Top Artists</a></li>
+<li><a href="/before_recommended">Recommended Songs</a></li>
+<li><a href="/about">About</a></li>
+{% endblock %}
+
+{% block body %}
+<div class="user-input">
+  <form action="/top_songs" class="top_songs" method="POST">
+    <center>
+      <label for="songs_limit">How Many Recent Songs Would You Like To Display? (Min: 1 , Max: 50):</label>
+      <input type="number" name="songs_limit" id="songs_limit" min="1" max="50" placeholder="1" required>
+      <br>
+      <label for="songs_offset">At Which Song Would You Like To Start From? (Recommended: 0 , Min: 0 , Max:
+        20):</label>
+      <input type="number" name="songs_offset" id="songs_offset" min="0" max="20" placeholder="0" required>
+      <span class="error-message">Please enter a valid display amount and offset.</span>
+      <br>
+      <label for="songs_time_length">For What Time Period Would You Like To Display?:</label>
+      <select name="songs_time_length" id="songs_time_length" required>
+        <option value="short_term">Short Term</option>
+        <option value="medium_term">Medium Term</option>
+        <option value="long_term">Long Term</option>
+      </select>
+    </center>
+    <br>
+    <center><input type="submit" id="submit_button" value="Submit" name="top_songs" class="button" onclick="location.href = '/top_songs';"></center>
+  </form>
+</div>
+<!-- <script>
+  function validateForm() {
+    var offsetInput = document.getElementById("songs_offset");
+    var displayInput = document.getElementById("songs_limit");
+    var submitButton = document.getElementById("submit_button");
+    var errorMessage = document.querySelector(".error-message");
+
+    var offsetValue = parseInt(offsetInput.value);
+    var displayValue = parseInt(displayInput.value)
+    if (offsetValue >= 0 && offsetValue <= 20 && displayValue >= 1 && displayInput <= 50) {
+      errorMessage.style.display = "none";
+      return true;
+    } else {
+      errorMessage.style.display = "block";
+      return false;
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", function () {
+    var form = document.querySelector(".top_songs");
+    form.addEventListener("input", function (event) {
+      validateForm();
+      var submitButton = document.getElementById("submit_button");
+      submitButton.disabled = !this.checkValidity();
+    });
+  });
+</script> -->
+{% endblock %}

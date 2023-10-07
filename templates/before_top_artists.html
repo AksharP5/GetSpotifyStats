@@ -1,0 +1,36 @@
+{% extends "layout.html" %}
+{% block title %}
+Top Artists Attributes
+{% endblock %}
+
+{% block nav %}
+<li><a href="/home">Home</a></li>
+<li><a href="/recent_limit">Recent Songs</a></li>
+<li><a href="/before_top_songs">Top Songs</a></li>
+<li><a class="active" href="/before_top_artists">Top Artists</a></li>
+<li><a href="/before_recommended">Recommended Songs</a></li>
+<li><a href="/about">About</a></li>
+{% endblock %}
+
+{% block body %}
+<div class="user-input">
+    <form action="/top_artists" class="top_artists" method="POST">
+        <center>
+            <label for="artists_limit">How Many Artists Would You Like To Display? <br>(Min: 1, Max: 50):</label>
+            <input type="number" name="artists_limit" id="artists_limit" min="1" max="50" required>
+            <br>
+            <label for="artists_offset">At Which Artist Would You Like To Start From? <br>(Recommended: 0, Min: 0, Max: 20):</label>
+            <input type="number" name="artists_offset" id="artists_offset" min="0" max="20">
+            <br>
+            <label for="artists_time_length">For What Time Period Would You Like To Display? <br>(Short Term, Medium Term, Long Term):</label>
+            <select name="artists_time_length" id="artists_time_length">
+                <option value="short_term">Short Term</option>
+                <option value="medium_term">Medium Term</option>
+                <option value="long_term">Long Term</option>
+            </select>
+        </center>
+        <br>
+        <center><input type="submit" name="top_artists" onclick="location.href = '/top_artists';"></center>
+    </form>
+</div>
+{% endblock %}

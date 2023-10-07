@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+{% block title %}
+Invalid Input Entered
+{% endblock %}
+
+{% block nav %}
+<li><a class="active" href="/home">Home</a></li>
+<li><a href="/recent_limit">Recent Songs</a></li>
+<li><a href="/before_top_songs">Top Songs</a></li>
+<li><a href="/before_top_artists">Top Artists</a></li>
+<li><a href="/before_recommended">Recommended Songs</a></li>
+<li><a href="/about">About</a></li>
+{% endblock %}
+
+{% block body %}
+<main>
+<div class="invalid-input">
+  <center>
+    <h1>You Have Entered An Invalid Input</h1>
+    <h2>Please Read Each Input Requirement Carefully, And Try Again</h2>
+    <img src="https://miro.medium.com/v2/resize:fit:1000/0*cxIcnXaPY92IHIoW" alt="Gustavo Fring Invalid Input Meme">
+  </center>
+</div>
+</main>
+{% endblock %}

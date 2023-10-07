@@ -1,0 +1,38 @@
+{% extends "layout.html" %}
+{% block title %}
+About Spotify Stats
+{% endblock %}
+
+{% block nav %}
+<li><a href="/home">Home</a></li>
+<li><a href="/recent_limit">Recent Songs</a></li>
+<li><a href="/before_top_songs">Top Songs</a></li>
+<li><a href="/before_top_artists">Top Artists</a></li>
+<li><a href="/before_recommended">Recommended Songs</a></li>
+<li><a class="active" href="/about">About</a></li>
+{% endblock %}
+
+{% block body %}
+<div class="user-input">
+  <div class="about">
+    <center>
+    <p>
+      Spotify Stats is a place where you can find all the information you have been searching for
+      related to your spotify account. Are you tired of listening to the same music? <a href="/before_recommended">
+        Generate some recommended songs</a> based on some of the artists, songs, and genres that you enjoy. Do you want
+      to
+      know
+      what the most <a href="/recent_limit">recent songs</a> you listened to were? Are you curious about your
+      <a href="/top_artists">top artists</a> or <a href="/before_top_songs">songs</a>?
+      You can access all of this information here, with just a few clicks.
+    </p>
+    <p>
+      The login process is fully secure, as you can find this service under your allowed
+      apps in your Spotify account, and remove access if needed.
+      The website was created by AP, please reach out with any feedback!
+    </p>
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/Farmer_meme_with_apostrophe.jpg/1200px-Farmer_meme_with_apostrophe.jpg" alt="It Ain't Much But It's Honest Work Meme">
+    </center>
+  </div>
+</div>
+{% endblock %}

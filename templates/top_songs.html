@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+{% block title %}
+Top Songs
+{% endblock %}
+
+{% block nav %}
+<li><a href="/home">Home</a></li>
+<li><a href="/recent_limit">Recent Songs</a></li>
+<li><a class="active" href="/before_top_songs">Top Songs</a></li>
+<li><a href="/before_top_artists">Top Artists</a></li>
+<li><a href="/before_recommended">Recommended Songs</a></li>
+<li><a href="/about">About</a></li>
+{% endblock %}
+
+{% block body %}
+<main>
+<form action="/top_songs" class="top_songs" method="POST">
+  <div class="card-container">
+    {% for key, value in top_tracks.items() %}
+      <div class="card">
+        <center><img src="{{ value[1] }}" alt="{{ value[0] }} Song Image" class="pic"></center>
+        <h3>{{key}}: {{ value[0] }}</h3>
+      </div>
+    {% endfor %}
+  </div>
+</form>
+</main>
+{% endblock %}

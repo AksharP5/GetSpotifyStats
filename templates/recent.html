@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+{% block title %}
+Your Recently Played Songs
+{% endblock %}
+
+{% block nav %}
+<li><a href="/home">Home</a></li>
+<li><a class="active" href="/recent_limit">Recent Songs</a></li>
+<li><a href="/before_top_songs">Top Songs</a></li>
+<li><a href="/before_top_artists">Top Artists</a></li>
+<li><a href="/before_recommended">Recommended Songs</a></li>
+<li><a href="/about">About</a></li>
+{% endblock %}
+
+{% block body %}
+<main>
+<form action="/recent" class="recent" method="POST">
+  <div class="card-container">
+    {% for key, value in my_dict.items() %}
+    <div class="card">
+      <center><img src="{{ value[2] }}" alt="{{ value[1] }} Song Image" class="pic"></center>
+      <h3>{{key}}: {{ value[0] }} - {{ value[1] }}</h3>
+    </div>
+    {% endfor %}
+  </div>
+</form>
+</main>
+{% endblock %}

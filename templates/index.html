@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+{% block title %}
+Spotify Stats Home
+{% endblock %}
+{% block nav %}
+<li><a class="active" href="/home">Home</a></li>
+<li><a href="/recent_limit">Recent Songs</a></li>
+<li><a href="/before_top_songs">Top Songs</a></li>
+<li><a href="/before_top_artists">Top Artists</a></li>
+<li><a href="/before_recommended">Recommended Songs</a></li>
+<li><a href="/about">About</a></li>
+{% endblock %}
+{% block body %}
+<main>
+  <h1 class="discover-header">Discover Weekly</h1>
+  <div class="card-container">
+    
+    {% for track in top_tracks %}
+    <div class="card">
+      <center><img src="{{ track.track.album.images.0.url }}" alt="{{ track.track.name }} Song Image" class="pic"></center> 
+      <h3>{{ track.track.name }}</h3>
+      <p>{{ track.track.artists.0.name }}</p>
+    </div>
+    {% endfor %}
+  </div>
+</main>
+
+
+
+{% endblock %}

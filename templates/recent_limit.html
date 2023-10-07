@@ -1,0 +1,56 @@
+{% extends "layout.html" %}
+{% block title %}
+Number Of Recently Played Songs
+{% endblock %}
+
+{% block nav %}
+<li><a href="/home">Home</a></li>
+<li><a class="active" href="/recent_limit">Recent Songs</a></li>
+<li><a href="/before_top_songs">Top Songs</a></li>
+<li><a href="/before_top_artists">Top Artists</a></li>
+<li><a href="/before_recommended">Recommended Songs</a></li>
+<li><a href="/about">About</a></li>
+{% endblock %}
+
+{% block body %}
+
+<div class="user-input">
+  <form action="/recent" class="recent_limit" method="POST" onsubmit="return validateForm()">
+    <center>
+      <label for="recent_limit"><br>How Many Of Your Recent Songs Would You Like To Display? <br>(Default/Min: 1, Max:
+        50):</label>
+      <input type="number" name="recent_limit" id="recent_limit_input" min="1" max="50" placeholder="1" required>
+      <span class="error-message">Please enter a valid number between 1 and 50.</span>
+      <br>
+      <input type="submit" id="submit_button" class="button" value="Submit" disabled>
+    </center>
+  </form>
+</div>
+
+
+<script>
+  function validateForm() {
+    var input = document.getElementById("recent_limit_input");
+    var submitButton = document.getElementById("submit_button");
+    var errorMessage = document.querySelector(".error-message");
+
+    var value = parseInt(input.value);
+    if (value >= 1 && value <= 50) {
+      errorMessage.style.display = "none";
+      return true;
+    } else {
+      errorMessage.style.display = "block";
+      return false;
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", function () {
+    var form = document.querySelector(".recent_limit");
+    form.addEventListener("input", function (event) {
+      validateForm();
+      var submitButton = document.getElementById("submit_button");
+      submitButton.disabled = !this.checkValidity();
+    });
+  });
+</script>
+{% endblock %}
