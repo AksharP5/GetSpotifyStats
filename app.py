@@ -68,11 +68,14 @@ def before_top_artists():
 @app.route("/top_artists", methods = ["POST", "GET"])
 def top_artists():
     limit, offset, time_length = top_artists_vars(request=request)
-    if int(limit) >= 1 and int(limit) <= 50 and int(offset) >= 0 and int(offset) <= 20:
-        top_artists = get_Users_Top_Artists(gen_Spotipy(), int(limit), int(offset), time_length)
-        return render_template("top_artists.html", top_artists = top_artists)
-    else:
-        return render_template("invalid_input.html")
+    try: 
+        if int(limit) >= 1 and int(limit) <= 50 and int(offset) >= 0 and int(offset) <= 20:
+            top_artists = get_Users_Top_Artists(gen_Spotipy(), int(limit), int(offset), time_length)
+            return render_template("top_artists.html", top_artists = top_artists)
+        else:
+            return render_template("invalid_input.html")
+    except:
+        return render_template("invalid_input.html") 
    
 @app.route("/before_recommended", methods = ["POST", "GET"])
 def before_recommended():
