@@ -49,20 +49,3 @@
 - ### Homepage
     ![image](./Images/Spotify%20Stats%20Homepage.PNG)
 
-- ### Recent Songs
-    ![image](./Images/recent_songs_spotify_stats.PNG)
-
-- ### Top Songs
-    ![image](./Images/top_songs.PNG)
-
-- ### Top Artists
-    ![image](./Images/topArtists.PNG)
-
-- ### Recommended Songs
-    ![image](./Images/recommended.PNG)
-
-- ### About
-    ![image](./Images/about.PNG)
-
-- ### Invalid Input
-    ![image](./Images/err.PNG)
