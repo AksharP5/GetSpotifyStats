@@ -20,7 +20,7 @@ packaging==23.2
 python-decouple==3.8
 python-dotenv==1.0.0
 redis==5.0.1
-requests==2.31.0
+requests==2.32.2
 six==1.16.0
 spotipy==2.23.0
 tqdm==4.66.1
