@@ -23,7 +23,7 @@ redis==5.0.1
 requests==2.32.2
 six==1.16.0
 spotipy==2.23.0
-tqdm==4.66.1
+tqdm==4.66.3
 urllib3==2.2.2
 Werkzeug==3.0.3
 yarl==1.9.2
