@@ -39,6 +39,62 @@ body {
     padding: 0;
 }
 
+#hold_images {
+    display: flex;
+    overflow-x: auto;
+    white-space: nowrap;
+    padding: 20px;
+    scroll-behavior: smooth;
+    gap: 20px;
+}
+
+#icon_left, #icon_right {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 40px;
+    color: white;
+    cursor: pointer;
+    z-index: 100;
+}
+
+#icon_left {
+    left: 20px;
+}
+
+#icon_right {
+    right: 20px;
+}
+
+.card-container-scroll {
+    display: flex;
+    gap: 20px;
+}
+
+.card-scroll {
+    background-color: var(--card-background-color);
+    padding: 20px;
+    text-align: center;
+    border-radius: 5px;
+    width: 200px;
+    min-width: 200px;
+    flex: 0 0 auto;
+    transition: transform 0.4s ease-in-out;
+}
+
+.card-scroll:hover {
+    transform: scale(1.2);
+}
+
+#holdimages::-webkit-scrollbar {
+    display: none;
+}
+
+#hold_images {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
 .home {
     color: var(--text-color);
 }
@@ -223,6 +279,7 @@ input {
 .pic {
     max-width: 100%;
     height: auto;
+    border-radius: 5px;
 }
 
 h3 p {
@@ -282,8 +339,7 @@ input:hover {
 .discover-header {
     color: var(--text-color);
     text-align: center;
-    margin-top: 0;
-    margin-bottom: 1;
+    margin-top: 20px;
 }
 
 .invalid-input {
