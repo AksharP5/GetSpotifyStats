@@ -13,18 +13,52 @@ Spotify Stats Home
 {% block body %}
 <main>
   <h1 class="discover-header">Discover Weekly</h1>
-  <div class="card-container">
-    
+
+  <i id="icon_left" class="fa fa-chevron-left"></i>
+  <div id="hold_images" class="card-container-scroll">
     {% for track in top_tracks %}
-    <div class="card">
-      <center><img src="{{ track.track.album.images.0.url }}" alt="{{ track.track.name }} Song Image" class="pic"></center> 
+    <div class="card-scroll">
+      <center>
+        <img src="{{ track.track.album.images.0.url }}" alt="{{ track.track.name }} Song Image" class="pic">
+      </center>
       <h3>{{ track.track.name }}</h3>
       <p>{{ track.track.artists.0.name }}</p>
     </div>
     {% endfor %}
   </div>
+  <i id="icon_right" class="fa fa-chevron-right"></i>
+
 </main>
 
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+      const scrollAmount = 400; 
+      const scrollDuration = 800; 
+
+      const container = document.getElementById("hold_images");
+      const iconRight = document.getElementById("icon_right");
+      const iconLeft = document.getElementById("icon_left");
+
+      
+      iconRight.addEventListener("click", function () {
+          container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+      });
+
+      
+      iconLeft.addEventListener("click", function () {
+          container.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+      });
 
 
+      const images = document.querySelectorAll('.pic');
+      images.forEach(function(image) {
+          image.addEventListener('mouseover', function () {
+              this.classList.add('transition');
+          });
+          image.addEventListener('mouseout', function () {
+              this.classList.remove('transition');
+          });
+      });
+  });
+</script>
 {% endblock %}

@@ -1,37 +1,42 @@
-import spotipy
+import os
 from datetime import timedelta
-from spotipy.oauth2 import SpotifyOAuth, SpotifyClientCredentials
 from flask import Flask, render_template, request, redirect, session, url_for
+from spotipy.oauth2 import SpotifyOAuth, SpotifyClientCredentials
+import spotipy
 from decouple import config
 from dotenv import load_dotenv
-import os
 
 load_dotenv()
+
+app = Flask(__name__)
+
 CLIENT_ID = config("CLIENT_ID")
 CLIENT_SECRET = config("CLIENT_SECRET")
 REDIRECT_URL = config("REDIRECT_URL")
-sp_oauth = SpotifyOAuth(client_id=CLIENT_ID, client_secret=CLIENT_SECRET, redirect_uri=REDIRECT_URL, scope="user-read-recently-played,user-top-read")
+SCOPES = "user-read-recently-played,user-top-read"
 
-app = Flask(__name__)
+sp_oauth = SpotifyOAuth(
+    client_id=CLIENT_ID,
+    client_secret=CLIENT_SECRET,
+    redirect_uri=REDIRECT_URL,
+    scope=SCOPES
+)
+
 @app.route("/")
 @app.route("/home")
 def main():
     auth_manager = SpotifyClientCredentials(client_id=CLIENT_ID, client_secret=CLIENT_SECRET)
     sp = spotipy.Spotify(auth_manager=auth_manager)
-    top_tracks_playlist = sp.playlist('37i9dQZEVXbMDoHDwVN2tF')  
-    top_tracks = top_tracks_playlist['tracks']['items']
-
+    top_tracks = sp.playlist('2DCBk0AdKhUxb2ANXckhMO')['tracks']['items']
     return render_template("index.html", top_tracks=top_tracks)
 
 @app.route("/login")
 def login():
-    auth_url = sp_oauth.get_authorize_url()
-    return redirect(auth_url)
+    return redirect(sp_oauth.get_authorize_url())
 
 @app.route("/callback")
 def callback():
-    token_info = sp_oauth.get_access_token(request.args.get("code"))
-    session["token_info"] = token_info
+    session["token_info"] = sp_oauth.get_access_token(request.args.get("code"))
     return redirect(url_for("main"))
 
 @app.route("/about")
@@ -44,11 +49,11 @@ def before_recent():
 
 @app.route("/recent", methods = ["POST", "GET"])
 def recent():
-    limit = recent_vars(request=request)
+    limit = recent_vars(request)
     my_dict = get_Users_Recently_Played(gen_Spotipy(), int(limit))
-    return render_template("recent.html", my_dict = my_dict)
+    return render_template("recent.html", my_dict=my_dict)
 
-@app.route("/before_top_songs", methods = ["POST", "GET"])
+@app.route("/before_top_songs", methods=["GET"])
 def before_top_songs():
     return render_template("before_top_songs.html")
 
@@ -61,7 +66,7 @@ def top_songs():
     else:
         return render_template("invalid_input.html")
 
-@app.route("/before_top_artists", methods = ["POST", "GET"])
+@app.route("/before_top_artists", methods=["GET"])
 def before_top_artists():
     return render_template("before_top_artists.html")
 
@@ -111,43 +116,31 @@ def get_genre_and_country_before_rec(seed_genres, seed_countries, gen_genre, cou
     return seed_genres, seed_countries
 
 def get_songs_before_rec(seed_songs, recent_songs, short_top_songs, medium_top_songs, long_top_songs, Song_count):
-    for key, value in long_top_songs.items():
-        if long_top_songs.get(key, 0) != 0:
-            if long_top_songs.get(key)[0] not in seed_songs:
-                seed_songs[long_top_songs.get(key)[0]] = [Song_count, long_top_songs.get(key)[1], long_top_songs.get(key)[2]]
-                Song_count+=1
-        if medium_top_songs.get(key, 0) != 0:
-            if medium_top_songs.get(key)[0] not in seed_songs:
-                seed_songs[medium_top_songs.get(key)[0]] = [Song_count, medium_top_songs.get(key)[1], medium_top_songs.get(key)[2]]
-                Song_count+=1
-        if short_top_songs.get(key, 0) != 0:
-            if short_top_songs.get(key)[0] not in seed_songs:
-                seed_songs[short_top_songs.get(key)[0]] = [Song_count, short_top_songs.get(key)[1], short_top_songs.get(key)[2]]
-                Song_count+=1
-        if recent_songs.get(key, 0) != 0:
-            if recent_songs.get(key)[0][0] not in seed_songs:
-                seed_songs[recent_songs.get(key)[0][0]] = [Song_count, recent_songs.get(key)[1], recent_songs.get(key)[2]]
-                Song_count+=1
+    for songs_dict in [long_top_songs, medium_top_songs, short_top_songs]:
+        for key, value in songs_dict.items():
+            if value[0] not in seed_songs:
+                seed_songs[value[0]] = [Song_count, value[1], value[2]]
+                Song_count += 1
+    
+    for key, value in recent_songs.items():
+        if value[0][0] not in seed_songs:
+            seed_songs[value[0][0]] = [Song_count, value[1], value[2]]
+            Song_count += 1
+    
     return seed_songs
 
 def get_artists_before_rec(seed_artists, recent_songs_top, short_top_artists, medium_top_artists, long_top_artists, Artist_count):
-    for key, value in long_top_artists.items():
-        if long_top_artists.get(key, 0) != 0:
-            if long_top_artists.get(key)[0] not in seed_artists:
-                seed_artists[long_top_artists.get(key)[0]] = [Artist_count, long_top_artists.get(key)[1], long_top_artists.get(key)[2]]
-                Artist_count+=1
-        if short_top_artists.get(key, 0) != 0:
-            if short_top_artists.get(key)[0] not in seed_artists:
-                seed_artists[short_top_artists.get(key)[0]] = [Artist_count, short_top_artists.get(key)[1] ,short_top_artists.get(key)[2]]
-                Artist_count+=1
-        if medium_top_artists.get(key, 0) != 0:
-            if medium_top_artists.get(key)[0] not in seed_artists:
-                seed_artists[medium_top_artists.get(key)[0]] = [Artist_count, medium_top_artists.get(key)[1], medium_top_artists.get(key)[2]]
-                Artist_count+=1
-        if recent_songs_top.get(key, 0) != 0:
-            if recent_songs_top.get(key)[0][0] not in seed_artists:
-                seed_artists[recent_songs_top.get(key)[0][0]] = [Artist_count, recent_songs_top.get(key)[1], recent_songs_top.get(key)[2]]
-                Artist_count+=1
+    for artists_dict in [long_top_artists, medium_top_artists, short_top_artists]:
+        for key, value in artists_dict.items():
+            if value[0] not in seed_artists:
+                seed_artists[value[0]] = [Artist_count, value[1], value[2]]
+                Artist_count += 1
+    
+    for key, value in recent_songs_top.items():
+        if value[0][0] not in seed_artists:
+            seed_artists[value[0][0]] = [Artist_count, value[1], value[2]]
+            Artist_count += 1
+    
     return seed_artists
 
 
@@ -159,7 +152,23 @@ def gen_before_rec_vars():
     top = gen_Spotipy()
     recent = gen_Spotipy()
 
-    gen_genre = top.recommendation_genre_seeds()
+    gen_genre = {
+        "genres": [
+            "acoustic", "afrobeat", "alt-rock", "alternative", "ambient", "anime", "black-metal", "bluegrass", "blues", "bossanova",
+            "brazil", "breakbeat", "british", "cantopop", "chicago-house", "children", "chill", "classical", "club", "comedy",
+            "country", "dance", "dancehall", "death-metal", "deep-house", "detroit-techno", "disco", "disney", "drum-and-bass",
+            "dub", "dubstep", "edm", "electro", "electronic", "emo", "folk", "forro", "french", "funk", "garage", "german",
+            "gospel", "goth", "grindcore", "groove", "grunge", "guitar", "happy", "hard-rock", "hardcore", "hardstyle",
+            "heavy-metal", "hip-hop", "holidays", "honky-tonk", "house", "idm", "indian", "indie", "indie-pop", "industrial",
+            "iranian", "j-dance", "j-idol", "j-pop", "j-rock", "jazz", "k-pop", "kids", "latin", "latino", "malay",
+            "mandopop", "metal", "metal-misc", "metalcore", "minimal-techno", "movies", "mpb", "new-age", "new-release",
+            "opera", "pagode", "party", "philippines-opm", "piano", "pop", "pop-film", "post-dubstep", "power-pop",
+            "progressive-house", "psych-rock", "punk", "punk-rock", "r-n-b", "rainy-day", "reggae", "reggaeton", "road-trip",
+            "rock", "rock-n-roll", "rockabilly", "romance", "sad", "salsa", "samba", "sertanejo", "show-tunes", "singer-songwriter",
+            "ska", "sleep", "songwriter", "soul", "soundtracks", "spanish", "study", "summer", "swedish", "synth-pop",
+            "tango", "techno", "trance", "trip-hop", "turkish", "work-out", "world-music"
+        ]
+    }
     countries = top.available_markets()
 
     recent_songs_top = get_Recent_Top(recent, 50)
@@ -195,21 +204,11 @@ def gen_rec(top, limit, country, artists, genres, songs):
     return rec
 
 def check_invalid(artists, genres, songs):
-    if artists is None and genres is None and songs is None:
+    if all(x is None for x in [artists, genres, songs]):
         return render_template("invalid_input.html")
-    elif artists is not None and genres is not None and songs is not None and len(artists) + len(genres) + len(songs) > 5:
-        return render_template("invalid_input.html")
-    elif artists is not None and genres is not None and songs is None and len(artists) + len(genres) > 5:
-        return render_template("invalid_input.html")
-    elif artists is not None and songs is not None and genres is None and len(artists) + len(songs) > 5:
-        return render_template("invalid_input.html")
-    elif artists is None and songs is not None and genres is not None and len(genres) + len(songs) > 5:
-        return render_template("invalid_input.html")
-    elif artists is not None and songs is None and genres is None and len(artists) > 5:
-        return render_template("invalid_input.html")
-    elif genres is not None and songs is None and artists is None and len(genres) > 5:
-        return render_template("invalid_input.html")
-    elif songs is not None and artists is None and genres is None and len(songs) > 5:
+    
+    total_seeds = sum(len(x) for x in [artists, genres, songs] if x is not None)
+    if total_seeds > 5:
         return render_template("invalid_input.html")
 
 def check_None(artists, genres, songs):
@@ -220,8 +219,6 @@ def check_None(artists, genres, songs):
     if songs[0] == "None":
         songs = None
     return artists,genres,songs
-
-
 
 def gen_rec_vars(request):
     top = gen_Spotipy()
@@ -311,10 +308,12 @@ def get_Recent_Top(recently_played_spotipy: spotipy, limit: int):
     return my_dict
 
 def gen_Spotipy():
-    recent_Scope = "user-read-recently-played,user-top-read"
-    recently_played_spotipy = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=CLIENT_ID,
-                                                            client_secret=CLIENT_SECRET, redirect_uri=REDIRECT_URL, scope=recent_Scope))
-    return recently_played_spotipy
+    return spotipy.Spotify(auth_manager=SpotifyOAuth(
+        client_id=CLIENT_ID,
+        client_secret=CLIENT_SECRET,
+        redirect_uri=REDIRECT_URL,
+        scope=SCOPES
+    ))
 
 if __name__ == "__main__":
     app.run(debug=True, port=int(os.environ.get("PORT", 9001)))
