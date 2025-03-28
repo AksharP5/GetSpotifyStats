@@ -11,6 +11,8 @@
 
 ## How to run locally
 
+#### *This is an old project, some parts may be outdated, causing issues, please either create an issue or reach out to inform me.*
+
 1. #### Fork repository or clone locally
     ![image](./Images/Fork.PNG)
     ![image](./Images/Clone_Locally.PNG)
