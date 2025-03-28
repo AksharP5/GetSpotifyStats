@@ -18,9 +18,9 @@ app = Flask(__name__)
 def main():
     auth_manager = SpotifyClientCredentials(client_id=CLIENT_ID, client_secret=CLIENT_SECRET)
     sp = spotipy.Spotify(auth_manager=auth_manager)
-    top_tracks_playlist = sp.playlist('37i9dQZEVXbMDoHDwVN2tF')  
+    top_tracks_playlist = sp.playlist('2DCBk0AdKhUxb2ANXckhMO')  
     top_tracks = top_tracks_playlist['tracks']['items']
-
+    
     return render_template("index.html", top_tracks=top_tracks)
 
 @app.route("/login")
