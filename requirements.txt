@@ -24,6 +24,6 @@ requests==2.32.4
 six==1.16.0
 spotipy==2.25.1
 tqdm==4.66.3
-urllib3==2.5.0
+urllib3==2.6.0
 Werkzeug==3.0.6
 yarl>=1.17.0,<2.0
